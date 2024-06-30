@@ -24,6 +24,16 @@
     <ProjectGuid>{5f04a0d8-e88a-4168-aa8e-29a91bedc15a}</ProjectGuid>
     <RootNamespace>HMACtask</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+
+
+<ItemGroup>
+  <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\path\to\opencv\build\include;$(IncludePath)</IncludePath>
+  <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\path\to\opencv\build\include;$(IncludePath)</IncludePath>
+</ItemGroup>
+
+
+
+
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
