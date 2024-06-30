@@ -29,3 +29,6 @@ jobs:
     - name: Run Tests
       run: |
         vstest.console.exe HMACtask/HMACtask.sln /p:Configuration=Release
+
+    - name: Refresh Environment
+      run: refreshenv
