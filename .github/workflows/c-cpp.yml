@@ -14,10 +14,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # - name: Install OpenCV dependencies
-    #   run: |
-    #     choco install opencv -y
-    #     refreshenv
+    - name: Install OpenCV dependencies
+      run: |
+        choco install opencv -y
+        Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
 
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v1
@@ -29,6 +29,3 @@ jobs:
     - name: Run Tests
       run: |
         vstest.console.exe HMACtask/HMACtask.sln /p:Configuration=Release
-
-    # - name: Refresh Environment
-    #   run: refreshenv
