@@ -19,10 +19,8 @@ jobs:
 
     - name: Build Solution
       run: |
-        msbuild ../.././HMACtask/HMACtask.sln /p:Configuration=Release
+        msbuild HMACtask/HMACtask.sln /p:Configuration=Release
 
     - name: Run Tests
       run: |
-        vstest.console.exe ../.././HMACtask/HMACtask.sln /p:Configuration=Release
-
-
+        vstest.console.exe HMACtask/HMACtask.sln /p:Configuration=Release
