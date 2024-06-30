@@ -1,9 +1,9 @@
 // HMACtask.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 //libcrypto.lib;opencv_world420d.lib;
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc.hpp>
+// #include <opencv2/core/core.hpp>
+// #include <opencv2/highgui/highgui.hpp>
+// #include <opencv2/imgproc.hpp>
 #include <iostream>
 #include <fstream>
 #include <openssl/hmac.h>
