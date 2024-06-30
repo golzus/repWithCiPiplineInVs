@@ -14,6 +14,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Install OpenCV dependencies
+      run: |
+        choco install opencv -y
+        refreshenv
+
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v1
 
