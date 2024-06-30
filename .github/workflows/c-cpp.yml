@@ -17,15 +17,12 @@ jobs:
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v1
 
-    - name: Set up Visual Studio
-      uses: actions/setup-dotnet@v3
-      with:
-        vs-version: 2022
-
     - name: Build Solution
       run: |
-        msbuild "../.././HMACtask/HMACtask.sln" /p:Configuration=Release
+        msbuild ../.././HMACtask/HMACtask.sln /p:Configuration=Release
 
     - name: Run Tests
       run: |
-        vstest.console.exe "../.././HMACtask/HMACtask.sln" /p:Configuration=Release
+        vstest.console.exe ../.././HMACtask/HMACtask.sln /p:Configuration=Release
+
+
