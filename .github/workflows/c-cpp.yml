@@ -14,11 +14,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install OpenCV dependencies
-      run: |
-        curl -OL https://github.com/opencv/opencv/releases/download/4.9.0/opencv-4.9.0-vc16-vc14-win64.exe
-        .\opencv-4.9.0-vc16-vc14-win64.exe /verysilent /norestart
-        del .\opencv-4.9.0-vc16-vc14-win64.exe
+    # - name: Install OpenCV dependencies
+    #   run: |
+    #     curl -OL https://github.com/opencv/opencv/releases/download/4.9.0/opencv-4.9.0-vc16-vc14-win64.exe
+    #     .\opencv-4.9.0-vc16-vc14-win64.exe /verysilent /norestart
+    #     del .\opencv-4.9.0-vc16-vc14-win64.exe
 
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v1
