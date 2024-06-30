@@ -6,7 +6,7 @@
 // #include <opencv2/imgproc.hpp>
 #include <iostream>
 #include <fstream>
-#include <openssl/hmac.h>
+// #include <openssl/hmac.h>
 #include <sstream>
 #pragma warning(disable : 4996)
 #define My_Sicret "A12jh"
