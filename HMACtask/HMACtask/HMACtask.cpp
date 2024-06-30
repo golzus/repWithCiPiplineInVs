@@ -12,8 +12,8 @@
 #define My_Sicret "A12jh"
 #include <iomanip>
 //#include <gtest/gtest.h>
-#include <openssl/evp.h>
-#include <openssl/err.h>
+// #include <openssl/evp.h>
+// #include <openssl/err.h>
 #include <string.h> 
 #include <stdio.h> 
 using namespace cv;
