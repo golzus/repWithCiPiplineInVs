@@ -1,0 +1,18 @@
+\HMACtask\x64
+\HMACtask\.vs
+
+# Visual Studio
+.vs/
+*.vcxproj.user
+Debug/
+Release/
+*.exe
+*.log
+*.ilk
+*.pdb
+*.obj
+*.tlog
+*.ipch
+
+
+
