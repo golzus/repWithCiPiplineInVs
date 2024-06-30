@@ -18,6 +18,7 @@ jobs:
       run: |
         choco install opencv -y
         refreshenv
+        Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v1
