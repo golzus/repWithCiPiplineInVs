@@ -24,7 +24,7 @@ jobs:
 
     - name: Build Solution
       run: |
-        msbuild HMACtask/HMACtask.sln /p:Configuration=Release
+        msbuild HMACtask/HMACtask.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v142
 
     - name: Run Tests
       run: |
