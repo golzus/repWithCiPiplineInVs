@@ -16,16 +16,15 @@ jobs:
 
     - name: Install OpenCV dependencies
       run: |
-        choco install opencv -y
-        Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
+        curl -OL https://github.com/opencv/opencv/releases/download/4.9.0/opencv-4.9.0-vc16-vc14-win64.exe
+        .\opencv-4.9.0-vc16-vc14-win64.exe /verysilent /norestart
+        del .\opencv-4.9.0-vc16-vc14-win64.exe
 
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v1
 
     - name: Build Solution
-      run: |
-        msbuild HMACtask/HMACtask.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v142
+      run: msbuild HMACtask/HMACtask.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v142
 
     - name: Run Tests
-      run: |
-        vstest.console.exe HMACtask/HMACtask.sln /p:Configuration=Release
+      run: vstest.console.exe HMACtask/HMACtask.sln /p:Configuration=Release
