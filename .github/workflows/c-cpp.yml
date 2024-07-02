@@ -23,16 +23,16 @@ jobs:
           [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
           iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-      - name: Install OpenSSL (latest stable version)  # No need for --version latest
+      - name: Install OpenSSL (latest stable version)
         run: choco install openssl -y
 
       - name: Verify OpenSSL Installation  # Added for verification
         run: |
           openssl version
 
-      - name: הגדרת סביבת משתנים ל-INCLUDE
+      - name: Set environment variable for INCLUDE path
         run: |
-          $env:INCLUDE += ";C:\Program Files\OpenSSL-Win64\include"  # החלף בנתיב הנכון
+          $env:INCLUDE += ";C:\Program Files\OpenSSL-Win64\include"  # Replace with your actual OpenSSL include path
 
       - name: Build Solution
         run: msbuild HMACtask/HMACtask.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v142
@@ -52,4 +52,3 @@ jobs:
           openssl dgst -sha512 -sign privatekey.pem -out latest.sig latest.zip
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-
