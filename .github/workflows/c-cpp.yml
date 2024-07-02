@@ -17,14 +17,11 @@ jobs:
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v1
 
-    - name: Download and install 7zip
-      run: choco install 7zip
-
     - name: Download OpenSSL
-      run: curl -L -o openssl.zip https://slproweb.com/download/Win64OpenSSL-1_1_1g.zip
+      run: curl -L -o openssl.exe https://slproweb.com/download/Win64OpenSSL-1_1_1g.exe
 
-    - name: Extract OpenSSL
-      run: 7z x openssl.zip -o"C:\OpenSSL"
+    - name: Install OpenSSL
+      run: openssl.exe /silent /dir=C:\OpenSSL
 
     - name: Set up OpenSSL environment variables
       run: |
