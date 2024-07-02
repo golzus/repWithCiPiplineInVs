@@ -30,13 +30,12 @@ jobs:
         run: |
           openssl version
 
-      - name: Set up OpenSSL environment variables
+      - name: הגדרת סביבת משתנים ל-INCLUDE
         run: |
-          $env:Path += ";C:\Program Files\OpenSSL-Win64\bin"  # Using Path instead of INCLUDE
-          $env:INCLUDE += ";C:\Program Files\OpenSSL-Win64\include"
+          $env:INCLUDE += ";C:\Program Files\OpenSSL-Win64\include"  # החלף בנתיב הנכון
 
-      - name: Build Solution (adding /I for include path)
-        run: msbuild HMACtask/HMACtask.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v142 /I:"C:\Program Files\OpenSSL-Win64\include"
+      - name: Build Solution
+        run: msbuild HMACtask/HMACtask.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v142
 
       - name: Run Tests
         run: vstest.console.exe HMACtask/HMACtask.sln /p:Configuration=Release
@@ -53,3 +52,4 @@ jobs:
           openssl dgst -sha512 -sign privatekey.pem -out latest.sig latest.zip
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+
