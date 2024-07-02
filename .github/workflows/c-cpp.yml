@@ -28,9 +28,9 @@ jobs:
 
     - name: Set up OpenSSL environment variables
       run: |
-        set PATH=%PATH%;C:\Program Files\OpenSSL-Win64\bin
-        set INCLUDE=%INCLUDE%;C:\Program Files\OpenSSL-Win64\include
-        set LIB=%LIB%;C:\Program Files\OpenSSL-Win64\lib
+        $env:PATH += ";C:\Program Files\OpenSSL-Win64\bin"
+        $env:INCLUDE += ";C:\Program Files\OpenSSL-Win64\include"
+        $env:LIB += ";C:\Program Files\OpenSSL-Win64\lib"
 
     - name: Build Solution
       run: msbuild HMACtask/HMACtask.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v142
