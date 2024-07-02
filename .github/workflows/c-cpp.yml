@@ -23,8 +23,8 @@ jobs:
           [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
           iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-      - name: Install OpenSSL (with verification)
-        run: choco install openssl --version latest -y  # Ensures latest version
+      - name: Install OpenSSL (latest stable version)  # No need for --version latest
+        run: choco install openssl -y
 
       - name: Verify OpenSSL Installation  # Added for verification
         run: |
