@@ -24,7 +24,7 @@ jobs:
         iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
     - name: Install OpenSSL
-      run: choco install openssl --version=1.1.1g -y
+      run: choco install openssl -y
 
     - name: Set up OpenSSL environment variables
       run: |
