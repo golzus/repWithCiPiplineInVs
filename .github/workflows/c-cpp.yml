@@ -11,42 +11,45 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up MSBuild
-      uses: microsoft/setup-msbuild@v1
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v1
 
-    - name: Install Chocolatey
-      run: |
-        Set-ExecutionPolicy Bypass -Scope Process -Force
-        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-        iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+      - name: Install Chocolatey
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-    - name: Install OpenSSL
-      run: choco install openssl -y
+      - name: Install OpenSSL (with verification)
+        run: choco install openssl --version latest -y  # Ensures latest version
 
-    - name: Set up OpenSSL environment variables
-      run: |
-        $env:PATH += ";C:\Program Files\OpenSSL-Win64\bin"
-        $env:INCLUDE += ";C:\Program Files\OpenSSL-Win64\include"
-        $env:LIB += ";C:\Program Files\OpenSSL-Win64\lib"
+      - name: Verify OpenSSL Installation  # Added for verification
+        run: |
+          openssl version
 
-    - name: Build Solution
-      run: msbuild HMACtask/HMACtask.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v142
+      - name: Set up OpenSSL environment variables
+        run: |
+          $env:Path += ";C:\Program Files\OpenSSL-Win64\bin"  # Using Path instead of INCLUDE
+          $env:INCLUDE += ";C:\Program Files\OpenSSL-Win64\include"
 
-    - name: Run Tests
-      run: vstest.console.exe HMACtask/HMACtask.sln /p:Configuration=Release
+      - name: Build Solution (adding /I for include path)
+        run: msbuild HMACtask/HMACtask.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v142 /I:"C:\Program Files\OpenSSL-Win64\include"
 
-    - name: Archive Artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: latest.zip
-        path: HMACtask/HMACtask.sln
+      - name: Run Tests
+        run: vstest.console.exe HMACtask/HMACtask.sln /p:Configuration=Release
 
-    - name: Sign release
-      run: |
-        echo $PRIVATE_KEY > privatekey.pem
-        openssl dgst -sha512 -sign privatekey.pem -out latest.sig latest.zip
-      env:
-        PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      - name: Archive Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: latest.zip
+          path: HMACtask/HMACtask.sln
+
+      - name: Sign release
+        run: |
+          echo $PRIVATE_KEY > privatekey.pem
+          openssl dgst -sha512 -sign privatekey.pem -out latest.sig latest.zip
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
