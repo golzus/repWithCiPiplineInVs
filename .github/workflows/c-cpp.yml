@@ -17,20 +17,23 @@ jobs:
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v1
 
-    - name: Download OpenSSL
-      run: curl -L -o openssl.exe https://slproweb.com/download/Win64OpenSSL-1_1_1g.exe
+    - name: Install Chocolatey
+      run: |
+        Set-ExecutionPolicy Bypass -Scope Process -Force; \
+        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; \
+        iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
     - name: Install OpenSSL
-      run: openssl.exe /silent /dir=C:\OpenSSL
+      run: choco install openssl --version=1.1.1g -y
 
     - name: Set up OpenSSL environment variables
       run: |
-        set PATH=%PATH%;C:\OpenSSL\bin
-        set INCLUDE=%INCLUDE%;C:\OpenSSL\include
-        set LIB=%LIB%;C:\OpenSSL\lib
+        set PATH=%PATH%;C:\Program Files\OpenSSL-Win64\bin
+        set INCLUDE=%INCLUDE%;C:\Program Files\OpenSSL-Win64\include
+        set LIB=%LIB%;C:\Program Files\OpenSSL-Win64\lib
 
     - name: Build Solution
-      run: msbuild HMACtask/HMACtask.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v142 /p:IncludePath="C:\OpenSSL\include" /p:LibraryPath="C:\OpenSSL\lib"
+      run: msbuild HMACtask/HMACtask.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v142
 
     - name: Run Tests
       run: vstest.console.exe HMACtask/HMACtask.sln /p:Configuration=Release
