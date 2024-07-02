@@ -14,12 +14,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # - name: Install OpenCV dependencies
-    #   run: |
-    #     curl -OL https://github.com/opencv/opencv/releases/download/4.9.0/opencv-4.9.0-vc16-vc14-win64.exe
-    #     .\opencv-4.9.0-vc16-vc14-win64.exe /verysilent /norestart
-    #     del .\opencv-4.9.0-vc16-vc14-win64.exe
-
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v1
 
@@ -28,3 +22,16 @@ jobs:
 
     - name: Run Tests
       run: vstest.console.exe HMACtask/HMACtask.sln /p:Configuration=Release
+
+    - name: Archive Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: latest.zip
+        path: HMACtask/HMACtask.sln
+
+    - name: Sign release
+      run: |
+        echo $PRIVATE_KEY > privatekey.pem
+        openssl dgst -sha512 -sign privatekey.pem -out latest.sig latest.zip
+      env:
+        PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
