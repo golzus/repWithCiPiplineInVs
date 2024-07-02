@@ -17,6 +17,13 @@ jobs:
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v1
 
+    - name: Install OpenSSL
+      run: |
+        choco install openssl
+        setx PATH "%PATH%;C:\Program Files\OpenSSL-Win64\bin"
+        setx INCLUDE "%INCLUDE%;C:\Program Files\OpenSSL-Win64\include"
+        setx LIB "%LIB%;C:\Program Files\OpenSSL-Win64\lib"
+    
     - name: Build Solution
       run: msbuild HMACtask/HMACtask.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v142
 
