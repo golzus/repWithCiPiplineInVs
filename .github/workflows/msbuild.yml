@@ -34,8 +34,8 @@ jobs:
 
     - name: Add OpenSSL to PATH
       run: |
-        echo "::set-env name=PATH::${OPENSSL_PATH};%PATH%"
-        refreshenv
+        $newPath = "${env:OPENSSL_PATH};${env:Path}"
+        [Environment]::SetEnvironmentVariable("Path", $newPath, "Machine")
 
     - name: Build HMACtask
       run: |
