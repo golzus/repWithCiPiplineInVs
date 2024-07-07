@@ -37,9 +37,13 @@ jobs:
         $newPath = "${env:OPENSSL_PATH};${env:Path}"
         [Environment]::SetEnvironmentVariable("Path", $newPath, "Machine")
 
-    - name: Build HMACtask
+    - name: Set up MSBuild environment
       run: |
         "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+        set PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin";%PATH%
+
+    - name: Build HMACtask
+      run: |
         msbuild HMACtask/HMACtask.sln /p:Configuration=Debug
 
     - name: Test HMACtask
