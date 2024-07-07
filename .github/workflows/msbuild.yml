@@ -12,6 +12,9 @@ jobs:
   build:
     runs-on: windows-latest
 
+    env:
+      OPENSSL_PATH: "C:\\Program Files\\OpenSSL\\bin"
+
     steps:
     - uses: actions/checkout@v2
 
@@ -22,12 +25,17 @@ jobs:
     - name: Install OpenSSL
       run: |
         choco install openssl
-        echo "::add-path::C:\Program Files\OpenSSL\bin"  # Add OpenSSL bin directory to PATH
+        echo "OPENSSL_PATH=${OPENSSL_PATH}" >> $GITHUB_ENV
         refreshenv
 
     - name: Install OpenCV dependencies
       run: |
         choco install opencv
+
+    - name: Add OpenSSL to PATH
+      run: |
+        echo "::set-env name=PATH::${OPENSSL_PATH};%PATH%"
+        refreshenv
 
     - name: Build HMACtask
       run: |
