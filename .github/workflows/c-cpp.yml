@@ -23,11 +23,21 @@ jobs:
       run: |
         echo "OPENSSL_ROOT_DIR=C:\OpenSSL-Win64" >> $GITHUB_ENV
         echo "OPENSSL_LIBRARIES=C:\OpenSSL-Win64\lib" >> $GITHUB_ENV
+        echo "INCLUDE=C:\OpenSSL-Win64\include;%INCLUDE%" >> $GITHUB_ENV
+        echo "LIB=C:\OpenSSL-Win64\lib;%LIB%" >> $GITHUB_ENV
 
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v1.0.2
 
     - name: Build with MSBuild
+      run: msbuild /p:Configuration=Release /p:Platform=x64 HMACtask/HMACtask.sln
+
+  
+
+
+
+
+
       run: msbuild /p:Configuration=Release /p:Platform=x64 HMACtask/HMACtask.sln
 
     # - name: Run tests
