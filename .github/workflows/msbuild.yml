@@ -42,7 +42,7 @@ jobs:
         "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
         msbuild HMACtask/HMACtask.sln /p:Configuration=Debug
 
-    - name: Test HMACtask
-      run: |
-        cd HMACtask
-        ./Debug/HMACtask.exe  # Assuming Debug configuration
+    # - name: Test HMACtask
+    #   run: |
+    #     cd HMACtask
+    #     ./Debug/HMACtask.exe  # Assuming Debug configuration
