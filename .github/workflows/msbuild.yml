@@ -11,10 +11,14 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+
+    - name: Install Visual Studio Build Tools
+      run: |
+        choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
+        RefreshEnv.cmd
 
     - name: Install OpenSSL
       run: choco install openssl.light
@@ -27,5 +31,4 @@ jobs:
         echo "LIB=C:\Program Files\OpenSSL-Win64\lib;%LIB%" >> $GITHUB_ENV
 
     - name: Build with MSBuild
-      run: |
-        msbuild /p:Configuration=Release /p:Platform=x64 HMACtask/HMACtask.sln
+      run: msbuild /p:Configuration=Release /p:Platform=x64 HMACtask/HMACtask.sln
