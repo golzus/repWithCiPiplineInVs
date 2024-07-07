@@ -37,18 +37,26 @@ jobs:
         $newPath = "${env:OPENSSL_PATH};${env:Path}"
         [Environment]::SetEnvironmentVariable("Path", $newPath, "Machine")
 
+    - name: Import Chocolatey module in PowerShell
+      shell: powershell
+      run: |
+        Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+        refreshenv
+
     - name: Set up MSBuild environment
+      shell: cmd
       run: |
         "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
-        refreshenv
-        echo "MSBuild path: $env:Path"
-        where.exe msbuild
+        set PATH=C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin;%PATH%
+        where msbuild
 
     - name: Build HMACtask
+      shell: cmd
       run: |
-        & "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe" HMACtask/HMACtask.sln /p:Configuration=Debug
+        msbuild HMACtask/HMACtask.sln /p:Configuration=Debug
 
     - name: Test HMACtask
+      shell: cmd
       run: |
         cd HMACtask
-        ./Debug/HMACtask.exe  # Assuming Debug configuration
+        .\Debug\HMACtask.exe  # Assuming Debug configuration
