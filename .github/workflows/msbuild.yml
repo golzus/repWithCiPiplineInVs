@@ -1,4 +1,4 @@
-name: Build and Test C++ Project with OpenSSL Libraries
+name: CI Build
 
 on:
   push:
@@ -11,24 +11,27 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
 
-    - name: Install Visual Studio Build Tools
-      run: |
-        choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
-        RefreshEnv.cmd
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up MSVC environment
+      uses: microsoft/setup-msvc@v1.8.2
 
     - name: Install OpenSSL
-      run: choco install openssl.light
-
-    - name: Set environment variables for OpenSSL
       run: |
-        echo "OPENSSL_ROOT_DIR=C:\Program Files\OpenSSL-Win64" >> $GITHUB_ENV
-        echo "OPENSSL_LIBRARIES=C:\Program Files\OpenSSL-Win64\lib" >> $GITHUB_ENV
-        echo "INCLUDE=C:\Program Files\OpenSSL-Win64\include;%INCLUDE%" >> $GITHUB_ENV
-        echo "LIB=C:\Program Files\OpenSSL-Win64\lib;%LIB%" >> $GITHUB_ENV
+        choco install openssl
+        refreshenv
 
-    - name: Build with MSBuild
-      run: msbuild /p:Configuration=Release /p:Platform=x64 HMACtask/HMACtask.sln
+    - name: Install OpenCV dependencies
+      run: |
+        choco install opencv
+
+    - name: Build HMACtask
+      run: |
+        msbuild HMACtask/HMACtask.sln /p:Configuration=Debug
+
+    - name: Test HMACtask
+      run: |
+        cd HMACtask
+        ./Debug/HMACtask.exe  # Assuming Debug configuration
