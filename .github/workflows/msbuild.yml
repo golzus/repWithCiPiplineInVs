@@ -21,7 +21,7 @@ jobs:
 
     - name: Install MSVC
       run: |
-        choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
+        choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.Windows10SDK.18362"
 
     - name: Install OpenSSL
       run: |
@@ -37,23 +37,13 @@ jobs:
         $newPath = "${env:OPENSSL_PATH};${env:Path}"
         [Environment]::SetEnvironmentVariable("Path", $newPath, "Machine")
 
-    - name: Import Chocolatey module in PowerShell
-      shell: powershell
-      run: |
-        Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-        refreshenv
-
-    - name: Set up MSBuild environment
+    - name: Set up MSBuild environment and build
       shell: cmd
       run: |
-        "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
-        set PATH=C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin;%PATH%
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+        set PATH=%ProgramFiles(x86)%\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin;%PATH%
         where msbuild
-
-    - name: Build HMACtask
-      shell: cmd
-      run: |
-        msbuild HMACtask/HMACtask.sln /p:Configuration=Debug
+        msbuild HMACtask\HMACtask.sln /p:Configuration=Debug
 
     - name: Test HMACtask
       shell: cmd
