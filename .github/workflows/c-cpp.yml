@@ -1,4 +1,4 @@
-name: Build and Test C++ Project with OpenSSL
+name: Build and Test C++ Project with Required OpenSSL Libraries
 
 on:
   push:
@@ -16,15 +16,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install OpenSSL
-      run: choco install openssl -y
-
-    - name: Set environment variables
+    - name: Install necessary OpenSSL libraries
       run: |
-        echo "OPENSSL_ROOT_DIR=C:\\OpenSSL-Win64" >> $GITHUB_ENV
-        echo "OPENSSL_LIBRARIES=C:\\OpenSSL-Win64\\lib" >> $GITHUB_ENV
-        echo "INCLUDE=C:\\OpenSSL-Win64\\include;%INCLUDE%" >> $GITHUB_ENV
-        echo "LIB=C:\\OpenSSL-Win64\\lib;%LIB%" >> $GITHUB_ENV
+        choco install openssl.light
+
+    - name: Set environment variables for OpenSSL
+      run: |
+        echo "OPENSSL_ROOT_DIR=C:\Program Files\OpenSSL-Win64" >> $GITHUB_ENV
+        echo "OPENSSL_LIBRARIES=C:\Program Files\OpenSSL-Win64\lib" >> $GITHUB_ENV
+        echo "INCLUDE=C:\Program Files\OpenSSL-Win64\include;%INCLUDE%" >> $GITHUB_ENV
+        echo "LIB=C:\Program Files\OpenSSL-Win64\lib;%LIB%" >> $GITHUB_ENV
 
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v1.0.2
