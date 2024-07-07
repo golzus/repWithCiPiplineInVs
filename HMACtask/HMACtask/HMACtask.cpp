@@ -6,14 +6,15 @@
 // #include <opencv2/imgproc.hpp>
 #include <iostream>
 #include <fstream>
-#include <openssl/hmac.h>
 #include <sstream>
 #pragma warning(disable : 4996)
 #define My_Sicret "A12jh"
 #include <iomanip>
 #include <gtest/gtest.h>
-#include <openssl/evp.h>
-#include <openssl/err.h>
+// #include <openssl/evp.h>
+// #include <openssl/err.h>
+// #include <openssl/hmac.h>
+
 #include <string.h> 
 #include <stdio.h> 
 using namespace cv;
