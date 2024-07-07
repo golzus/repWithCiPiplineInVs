@@ -22,6 +22,7 @@ jobs:
     - name: Install OpenSSL
       run: |
         choco install openssl
+        echo "::add-path::C:\Program Files\OpenSSL\bin"  # Add OpenSSL bin directory to PATH
         refreshenv
 
     - name: Install OpenCV dependencies
