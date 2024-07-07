@@ -1,27 +1,34 @@
-name: C/C++ CI
+name: Build and Test C++ Project with OpenSSL
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
-    
-    - name: Set up Visual Studio
-      uses: actions/setup-msbuild@v1
-      
-    - name: Install OpenSSL
-      run: |
-        choco install openssl
-        echo "::add-path::C:\\Program Files\\OpenSSL-Win64\\bin"  # Add OpenSSL bin directory to PATH
-        echo "::set-env name=OPENSSL_ROOT_DIR::C:\\Program Files\\OpenSSL-Win64"
-        echo "::set-env name=OPENSSL_LIBRARIES::C:\\Program Files\\OpenSSL-Win64\\lib"
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-    - name: Build
-      run: msbuild HMACtask/HMACtask.sln /p:Configuration=Release
+    - name: Set up OpenSSL
+      run: choco install openssl
+
+    - name: Set environment variables
+      run: |
+        echo "OPENSSL_ROOT_DIR=C:\OpenSSL-Win64" >> $GITHUB_ENV
+        echo "OPENSSL_LIBRARIES=C:\OpenSSL-Win64\lib" >> $GITHUB_ENV
+
+    - name: Set up MSBuild
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Build with MSBuild
+      run: msbuild /p:Configuration=Release /p:Platform=x64 HMACtask/HMACtask.sln
+
+    # - name: Run tests
+    #   run: vstest.console.exe path\to\your\test\project\bin\Release\yourtestproject.dll
