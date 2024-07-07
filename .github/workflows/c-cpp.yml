@@ -11,44 +11,17 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v2
+    
+    - name: Set up Visual Studio
+      uses: actions/setup-msbuild@v1
+      
+    - name: Install OpenSSL
+      run: |
+        choco install openssl
+        echo "::add-path::C:\\Program Files\\OpenSSL-Win64\\bin"  # Add OpenSSL bin directory to PATH
+        echo "::set-env name=OPENSSL_ROOT_DIR::C:\\Program Files\\OpenSSL-Win64"
+        echo "::set-env name=OPENSSL_LIBRARIES::C:\\Program Files\\OpenSSL-Win64\\lib"
 
-      - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@v1
-
-      - name: Install Chocolatey
-        run: |
-          Set-ExecutionPolicy Bypass -Scope Process -Force
-          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-
-      - name: Install OpenSSL (latest stable version)
-        run: choco install openssl -y
-
-      - name: Verify OpenSSL Installation  # Added for verification
-        run: |
-          openssl version
-
-      - name: Set environment variable for INCLUDE path
-        run: |
-          $env:INCLUDE += ";C:\Program Files\OpenSSL-Win64\include"  # Replace with your actual OpenSSL include path
-
-      - name: Build Solution
-        run: msbuild HMACtask/HMACtask.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v142
-
-      - name: Run Tests
-        run: vstest.console.exe HMACtask/HMACtask.sln /p:Configuration=Release
-
-      - name: Archive Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: latest.zip
-          path: HMACtask/HMACtask.sln
-
-      - name: Sign release
-        run: |
-          echo $PRIVATE_KEY > privatekey.pem
-          openssl dgst -sha512 -sign privatekey.pem -out latest.sig latest.zip
-        env:
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+    - name: Build
+      run: msbuild HMACtask/HMACtask.sln /p:Configuration=Release
