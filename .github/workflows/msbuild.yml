@@ -16,7 +16,8 @@ jobs:
       OPENSSL_PATH: "C:\\Program Files\\OpenSSL\\bin"
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
     - name: Install MSVC
       run: |
@@ -26,7 +27,6 @@ jobs:
       run: |
         choco install openssl
         echo "OPENSSL_PATH=${OPENSSL_PATH}" >> $GITHUB_ENV
-        refreshenv
 
     - name: Install OpenCV dependencies
       run: |
@@ -42,7 +42,7 @@ jobs:
         "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
         msbuild HMACtask/HMACtask.sln /p:Configuration=Debug
 
-    # - name: Test HMACtask
-    #   run: |
-    #     cd HMACtask
-    #     ./Debug/HMACtask.exe  # Assuming Debug configuration
+    - name: Test HMACtask
+      run: |
+        cd HMACtask
+        ./Debug/HMACtask.exe  # Assuming Debug configuration
